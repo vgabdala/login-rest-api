@@ -10,6 +10,7 @@ var mongoose    = require('mongoose');
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
 var User   = require('./models/user'); // get our mongoose model
+var bcrypt = require('bcrypt'); // used to encrypt password
 
 // =======================
 // configuration =========
@@ -34,25 +35,37 @@ app.get('/', function(req, res) {
 });
 
 // API ROUTES -------------------
-//Save sample user
-app.get('/setup', function(req, res) {
+//Create user
+app.post('/signup', function(req, res) {
 
-  // create a sample user
-  var nick = new User({ 
-    name: 'vinnie', 
-    password: 'vinnie',
-    admin: true 
-  });
+	if(req.body.name == null){
+		res.json({ success: false, message: 'Sign up failed. Username must be provided.' });
+		return;
+	} 
 
-  // save the sample user
-  nick.save(function(err) {
-    if (err) throw err;
+	if(req.body.password == null){
+		res.json({ success: false, message: 'Sign up failed. Password must be provided.' });
+		return;
+	}
 
-    console.log('User saved successfully');
-    res.json({ success: true });
-  });
+  // BCRYPT + SALT
+  const saltRounds = 10;
+  bcrypt.hash(req.body.password, saltRounds).then(function(hash){
+		var user = new User({ 
+	    name: req.body.name, 
+	    password: hash,
+	    admin: true 
+	  });
+
+	  user.save(function(err) {
+	    if (err) throw err;
+
+	    console.log('User created successfully');
+	    res.json({ success: true });
+	  });
+	});
+
 });
-
 
 // get an instance of the router for api routes
 var apiRoutes = express.Router(); 
@@ -71,27 +84,26 @@ apiRoutes.post('/authenticate', function(req, res) {
       res.json({ success: false, message: 'Authentication failed. User not found.' });
     } else if (user) {
 
-      // check if password matches
-      if (user.password != req.body.password) {
-        res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-      } else {
+      bcrypt.compare(req.body.password, user.password, function(err, bCryptResponse) {
+      	if(bCryptResponse){
+	      	var token = jwt.sign(user, app.get('superSecret'), {
+	          expiresIn : 60*60*24 //24h 
+	        });
 
-        // if user is found and password is right
-        // create a token
-        var token = jwt.sign(user, app.get('superSecret'), {
-          expiresIn : 60*60*24 //24h 
-        });
-
-        // return the information including token as JSON
-        res.json({
-          success: true,
-          message: 'Enjoy your token!',
-          token: token
-        });
-      }   
-
+	        res.json({
+	          success: true,
+	          message: 'Enjoy your token!',
+	          token: token
+        	});
+      	} else {
+      		res.json({
+	          success: false,
+	          message: 'Wrong password!'
+        	});
+      	}
+        
+      });
     }
-
   });
 });
 
