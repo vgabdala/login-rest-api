@@ -42,7 +42,7 @@ app.post('/signup', function(req, res) {
 		res.json({ success: false, message: 'Sign up failed. Username must be provided.' });
 		return;
 	} 
-
+	
 	if(req.body.password == null){
 		res.json({ success: false, message: 'Sign up failed. Password must be provided.' });
 		return;
@@ -58,10 +58,16 @@ app.post('/signup', function(req, res) {
 	  });
 
 	  user.save(function(err) {
-	    if (err) throw err;
-
-	    console.log('User created successfully');
-	    res.json({ success: true });
+	    if (err) {
+	    	if(err.code == 11000){
+	    		res.json({ success: false, message: 'Sign up failed. Username already exists.' });
+	    	} else {
+					throw err;	    		
+	    	}
+	    } else {
+	    	res.json({ success: true, message: 'User created successfully' });
+	    }
+	    
 	  });
 	});
 
