@@ -1,6 +1,18 @@
 module.exports = {
 
-    'secret': 'vinnieabdala',
-    'database': 'mongodb://localhost:27017/authenticationdb'
+    mongo: {
+     	default: {
+    		secret: 'vinnieabdala',
+    		port: 27017
+    	},
+    	development: {
+				db: 'usercontroldev',
+				host: 'localhost'
+    	},
+    	production: {
+				db: 'usercontrol',
+				host: 'localhost'
+    	}
+    }
 
 };

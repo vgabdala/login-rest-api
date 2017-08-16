@@ -15,9 +15,21 @@ var bcrypt = require('bcrypt'); // used to encrypt password
 // =======================
 // configuration =========
 // =======================
-var port = process.env.PORT || 8080; // used to create, sign, and verify tokens
-mongoose.connect(config.database); // connect to database
-app.set('superSecret', config.secret); // secret variable
+var secret = config.mongo.default.secret;
+var dbPort = config.mongo.default.port;
+var dbHost;
+var dbName;
+
+if(app.get('env') == 'production'){
+	dbHost = config.mongo.production.host;
+	dbName = config.mongo.production.db;
+} else {
+	dbHost = config.mongo.development.host;
+	dbName = config.mongo.development.db;
+}
+
+mongoose.connect('mongodb://'+dbHost+':'+dbPort+'/'+dbName, { useMongoClient: true }); // connect to database	
+app.set('superSecret', config.mongo.default.secret); // secret variable
 
 // use body parser so we can get info from POST and/or URL parameters
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -30,8 +42,9 @@ app.use(morgan('dev'));
 // routes ================
 // =======================
 // basic route
+var port = process.env.NODE_PORT || 8080; // used to create, sign, and verify tokens
 app.get('/', function(req, res) {
-    res.send('Hello! The API is at http://localhost:' + port + '/api');
+    res.send('Hello! The API is at port ' + port + ' /api');
 });
 
 // API ROUTES -------------------
@@ -164,4 +177,4 @@ app.use('/api', apiRoutes);
 // start the server ======
 // =======================
 app.listen(port);
-console.log('Magic happens at http://localhost:' + port);
+console.log('login-rest-api is running on ' + app.get('env') + ' environment on port ' + port);
