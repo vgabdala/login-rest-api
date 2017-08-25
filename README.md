@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 These are the node modules used:
 
 ```
-npm install
+see package.json
 ```
 
 You can define on which port you want this API running at (default if not set: 8080):
