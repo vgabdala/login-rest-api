@@ -120,3 +120,42 @@ export function getAllUsers(req, res) {
     res.json(users);
   });
 }
+
+export function getUserById(req, res) {
+	if (mongoose.Types.ObjectId.isValid(req.params.userId)){
+    
+    User.find({_id: req.params.userId}, (err, user) => {
+      if (err) throw err;
+      return res.json(user);
+    });
+
+  } else {
+    return res.json({ success: false, message: 'View user failed. The id provided is an invalid ObjectId.' });
+  }
+}
+
+export function updateUser(req, res) {
+	if (mongoose.Types.ObjectId.isValid(req.params.userId)){
+    
+    User.update({_id: req.params.userId}, req.body, (err, result) => {
+      if (err) throw err;
+      return res.json(result);
+    });
+    
+  } else {
+    return res.json({ success: false, message: 'Update user failed. The id provided is an invalid ObjectId.' });  
+  }
+}
+
+export function deleteUser(req, res) {
+	if (mongoose.Types.ObjectId.isValid(req.params.userId)){
+    
+    User.remove({_id: req.params.userId}, (err, result) => {
+      if (err) throw err;
+      return res.json(result);
+    });
+    
+  } else {
+    return res.json({ success: false, message: 'Delete user failed. The id provided is an invalid ObjectId.' });  
+  }
+}
