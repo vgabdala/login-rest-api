@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 These are the node modules used:
 
 ```
-npm install express body-parser morgan mongoose jsonwebtoken bcrypt
+see package.json
 ```
 
 You can define on which port you want this API running at (default if not set: 8080):
@@ -30,7 +30,7 @@ export NODE_ENV=production # Default if not set 'development'
 
 ### Endpoints
 
-* /signup
+* /api/signup
 * /api/authenticate
 * /api/users
 * /api/token
