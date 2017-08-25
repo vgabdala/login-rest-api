@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 export function middlewareTokenValidation(req, res, next) {
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  var token = req.headers['x-access-token'];
 
   if (token) {
     jwt.verify(token, process.env.MONGO_SECRET, (err, decoded) => {      
@@ -95,7 +95,7 @@ export function authenticate(req, res) {
 }
 
 export function validateToken(req, res) {
-	var token = req.body.token || req.query.token || req.headers['x-access-token'];
+	var token = req.headers['x-access-token'];
 	if(token){
     jwt.verify(token, process.env.MONGO_SECRET, (err, decoded) => {      
       if (err) {
