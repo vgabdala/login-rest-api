@@ -32,7 +32,7 @@ app.get('/', function(req, res) {
 
 app.use('/api', routes)
 
-const port = process.env.NODE_PORT || 8080
+const port = process.env.NODE_PORT || 8081
 app.listen(port)
 
 console.log(`login-rest-api is running on ${env} environment on port ${port}`)

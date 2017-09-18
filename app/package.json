@@ -1,6 +1,9 @@
 {
   "name": "node-token-jwt",
   "main": "server.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
