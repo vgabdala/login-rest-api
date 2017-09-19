@@ -30,6 +30,8 @@ app.get('/', function(req, res) {
     res.send(`The API is available on '/api'`)
 });
 
+var cors = require('cors')
+app.use(cors())
 app.use('/api', routes)
 
 const port = process.env.NODE_PORT || 8081

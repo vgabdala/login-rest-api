@@ -1,6 +1,6 @@
 {
   "name": "node-token-jwt",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
