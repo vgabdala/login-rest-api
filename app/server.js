@@ -32,7 +32,7 @@ app.get('/service', function(req, res) {
 
 //var cors = require('cors')
 //app.use(cors())
-app.use('/api', routes)
+app.use('/service/api', routes)
 
 const port = process.env.NODE_PORT || 8081
 app.listen(port)
