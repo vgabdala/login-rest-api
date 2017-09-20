@@ -26,8 +26,8 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 
 // Start server
-app.get('/', function(req, res) {
-    res.send(`The API is available on '/api'`)
+app.get('/service', function(req, res) {
+    res.send(`The API is available on 'service/api'`)
 });
 
 //var cors = require('cors')
