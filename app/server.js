@@ -26,13 +26,11 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 
 // Start server
-app.get('/service', function(req, res) {
-    res.send(`The API is available on 'service/api'`)
+app.get('/login-service', function(req, res) {
+    res.send(`login-rest-api'`)
 });
 
-//var cors = require('cors')
-//app.use(cors())
-app.use('/service/api', routes)
+app.use('/login-service', routes)
 
 const port = process.env.NODE_PORT || 8081
 app.listen(port)
